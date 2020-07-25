@@ -67,13 +67,16 @@ type Updater struct {
 
 // NewUpdater creates a new updater with defaults that we're updating this
 // executable and it's going to be for the current OS and Architecture
-func NewUpdater(currentVersion, updateDataURL, urlPostfix string) Updater {
+func NewUpdater(currentVersion, updateDataURL, urlPostfix string, username string, password string) Updater {
 	return Updater{
 		currentVersion:     currentVersion,
 		apiURL:             updateDataURL,
 		binURL:             updateDataURL,
 		diffURL:            updateDataURL,
-		requester:          HTTPRequester{},
+		requester:          HTTPRequester{
+			Username: username,
+			Password: password,
+		},
 		updateableResolver: CurrentExeUpdatableResolver{},
 		platformResolver:   CurrentPlatformResolver{},
 		cmdName:            urlPostfix,

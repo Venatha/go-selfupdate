@@ -17,12 +17,21 @@ type Requester interface {
 // HTTPRequester is the normal requester that is used and does an HTTP
 // to the url location requested to retrieve the specified data.
 type HTTPRequester struct {
+	Username string
+	Password string
 }
 
 // Fetch will return an HTTP request to the specified url and return
 // the body of the result. An error will occur for a non 200 status code.
 func (httpRequester HTTPRequester) Fetch(url string) (io.ReadCloser, error) {
-	resp, err := http.Get(url)
+	c := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.SetBasicAuth(httpRequester.Username, httpRequester.Password)
+
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
