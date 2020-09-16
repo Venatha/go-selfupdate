@@ -151,7 +151,7 @@ func (u Updater) UpdateAvailable() (bool, error) {
 // Run attempts to grab the latest version information and then applies the
 // new patch if their is an update. If an update did occur, then we return
 // true. If we did not update (already up to date) then we return false.
-func (u *Updater) Run() (bool, error) {
+func (u *Updater) Run() (bool, error, string) {
 
 	info, err := u.fetchInfo()
 	if err != nil {
