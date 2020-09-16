@@ -209,7 +209,7 @@ func (u *Updater) Run() (bool, error, string) {
 
 	err, errRecover := up.FromStream(bytes.NewBuffer(bin))
 	if errRecover != nil {
-		return false, fmt.Errorf("update and recovery errors: %q %q", err, errRecover)
+		return false, fmt.Errorf("update and recovery errors: %q %q", err, errRecover), ""
 	}
 
 	if err != nil {
