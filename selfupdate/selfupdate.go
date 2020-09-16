@@ -155,29 +155,29 @@ func (u *Updater) Run() (bool, error) {
 
 	info, err := u.fetchInfo()
 	if err != nil {
-		return false, err
+		return false, err, ""
 	}
 
 	// No need to update
 	if info.Version == u.currentVersion {
-		return false, nil
+		return false, nil, ""
 	}
 
 	oldPath, err := u.updateableResolver.Resolve()
 	if err != nil {
-		return false, err
+		return false, err, ""
 	}
 
 	up := update.New()
 	up.Target(oldPath)
 
 	if err := up.CanUpdate(); err != nil {
-		return false, err
+		return false, err, ""
 	}
 
 	old, err := os.Open(oldPath)
 	if err != nil {
-		return false, err
+		return false, err, ""
 	}
 
 	bin, err := u.getExeWithPatchForVersion(old, info)
@@ -199,7 +199,7 @@ func (u *Updater) Run() (bool, error) {
 			} else {
 				log.Printf("error fetching full binary: %s", err)
 			}
-			return false, err
+			return false, err, ""
 		}
 	}
 
@@ -213,12 +213,12 @@ func (u *Updater) Run() (bool, error) {
 	}
 
 	if err != nil {
-		return false, err
+		return false, err, ""
 	}
 
 	u.currentVersion = info.Version
 
-	return true, nil
+	return true, nil, u.currentVersion
 }
 
 func (u *Updater) fetchInfo() (versionInfo, error) {
